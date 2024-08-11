@@ -8,12 +8,7 @@ def run_subprocess(command:str):
     param = command.split(" ")
     subprocess.run(param)
 
-def main():
-    # get input from file
-    with open("download_files.txt", "r") as f:
-        data = f.readlines()
-    
-    # extracting data and storing in a dictionary
+def get_input_data(data):
     data_dict = {}
     for key_value in data:
         key_pattern = r"^(.+)\s:\s.+$"
@@ -21,6 +16,16 @@ def main():
         value_pattern = r"^.+\s:\s(.+)\n?$"
         value = re.findall(value_pattern, key_value)[0].split(",")
         data_dict[key] = value
+    return data_dict
+
+def main():
+    # get input from file
+    with open("download_files.txt", "r") as f:
+        data = f.readlines()
+    
+    # extracting data and storing in a dictionary
+    data_dict = get_input_data(data)
+    
     # download git dir/file
     # make new dir to store the files
     save_dir = "./" + data_dict['save_dir'][0]
